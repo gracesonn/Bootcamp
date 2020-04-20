@@ -2,45 +2,43 @@ package mission2.demo.Controller;
 
 import mission2.demo.Model.Instruments;
 
-import mission2.demo.Service.InstrumentsService;
+import mission2.demo.Repository.InstrumentsRepository;
+/*import mission2.demo.Service.InstrumentsService;*/
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping
-public class InstrumentsController {
+public class InstrumentsController{
 
     @Autowired
-    InstrumentsService instrumentsService;
+    InstrumentsRepository instrumentsRepository;
 
-    @GetMapping("/gracesonn/instruments")
-    public List<Instruments> all_instruments() {
-
-        return InstrumentsService.getAllInstruments();
-    }
-    @GetMapping("/gracesonn/instruments/{id}")
-    public Instruments getInstruments(@PathVariable("id") Long id) {
-
-        return InstrumentsService.getInstruments(id);
-    }
-    @PostMapping("/gracesonn/instruments")
-    public void addInstruments(@RequestBody Instruments instruments){
-        instrumentsService.addInstruments(instruments);
+    @GetMapping("/instruments/getAllInstruments")
+    public List<Instruments> getAllInstruments(){
+        return instrumentsRepository.getAllInstruments();
     }
 
-    @PutMapping("/gracesonn/instruments/{id}")
-    public void updateInstruments(@RequestBody Instruments instruments, @PathVariable("id") Long id){
-        instrumentsService.updateInstruments(instruments, id);
+    @GetMapping("/instruments/getInstruments")
+    public Instruments getInstruments(@RequestParam("id") int id) {
+        return instrumentsRepository.getInstruments(id);
+    }
+    @PostMapping("/instruments/addInstruments")
+    public String addInstruments (@RequestBody Instruments instruments) {
+        return instrumentsRepository.addInstruments(instruments);
+    }
+    @PutMapping("/instruments/updateInstruments/{id}")
+    public void updateInstruments (@PathVariable int id, @RequestBody Instruments instruments) {
+        instrumentsRepository.updateInstruments(id,instruments);
+
     }
 
-    @DeleteMapping("/gracesonn/instruments/{id}")
-    public void deleteInstruments(@PathVariable("id") Long id){
-        instrumentsService.deleteInstruments(id);
+    @DeleteMapping("/instruments/deleteInstruments/{id}")
+    public int deteteInstruments(@PathVariable int id){
+        return  instrumentsRepository.deleteInstruments(id);
     }
+
+
 }
