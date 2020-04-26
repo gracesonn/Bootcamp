@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table
+@NoArgsConstructor
 public class Instruments{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +24,6 @@ public class Instruments{
 
     @Column
     private double price;
-
 
     public Instruments (int id,String brand, String type,double price) {
         this.id = id;

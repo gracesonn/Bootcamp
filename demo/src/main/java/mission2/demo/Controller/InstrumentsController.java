@@ -1,13 +1,16 @@
 package mission2.demo.Controller;
 
+import mission2.demo.Exception.instrumentsNotFoundException;
 import mission2.demo.Model.Instruments;
 
 import mission2.demo.Repository.InstrumentsRepository;
 /*import mission2.demo.Service.InstrumentsService;*/
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -22,9 +25,16 @@ public class InstrumentsController{
     }
 
     @GetMapping("/instruments/getInstruments")
-    public Instruments getInstruments(@RequestParam("id") int id) {
-        return instrumentsRepository.getInstruments(id);
+    public ResponseEntity<Optional<Instruments>> getInstruments(@RequestParam("id") int id) {
+    /*public Instruments getInstruments(@PathVariable int id) {*/
+        Optional<Instruments> eg = Optional.ofNullable(instrumentsRepository.getInstruments(id));
+        if (eg.isEmpty()) {
+            throw new instrumentsNotFoundException(id);
+        } else {
+            return ResponseEntity.ok(eg);
+        }
     }
+
     @PostMapping("/instruments/addInstruments")
     public String addInstruments (@RequestBody Instruments instruments) {
         return instrumentsRepository.addInstruments(instruments);
